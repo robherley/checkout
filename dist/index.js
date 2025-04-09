@@ -311,8 +311,10 @@ class GitAuthHelper {
             // Remove inherited permissions on Windows
             if (IS_WINDOWS) {
                 const icacls = yield io.which('icacls.exe');
+                yield exec.exec(`"${icacls}" "${this.sshKeyPath}"`);
                 yield exec.exec(`"${icacls}" "${this.sshKeyPath}" /grant:r "${process.env['USERDOMAIN']}\\${process.env['USERNAME']}:F"`);
                 yield exec.exec(`"${icacls}" "${this.sshKeyPath}" /inheritance:r`);
+                yield exec.exec(`"${icacls}" "${this.sshKeyPath}"`);
             }
             // Write known hosts
             const userKnownHostsPath = path.join(os.homedir(), '.ssh', 'known_hosts');
